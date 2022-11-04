@@ -1,0 +1,12 @@
+.main-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.sticky-thead {
+    height: 60px;
+    vertical-align: middle !important;
+    border-bottom: 1px solid currentColor;
+    position: sticky;
+    top: 0;
+}

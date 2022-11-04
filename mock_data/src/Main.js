@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import json from './mock_stores.json';
 import Table from "./Table";
+import logo from './assets/img/logo.png';
 
 class Main extends Component {
     state = {
@@ -40,9 +41,19 @@ class Main extends Component {
 
     render() {
         return (
-            <Table
-                data={this.calc()}
-            />
+            <>
+                <header className="bg-dark text-white shadow p-4 mb-5">
+                    <div className="container">
+                        <img src={logo} alt="Mock data" height={30}/>
+                    </div>
+                </header>
+
+                <main className="container">
+                    <Table
+                        data={this.calc()}
+                    />
+                </main>
+            </>
         )
     }
 }

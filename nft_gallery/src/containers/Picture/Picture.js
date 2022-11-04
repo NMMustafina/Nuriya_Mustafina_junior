@@ -1,11 +1,24 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {fetchPicture} from "../../store/actions/picturesActions";
-import {Box, Card, CardContent, CardMedia, Grid, LinearProgress, Typography} from "@mui/material";
+import {
+    Avatar,
+    Backdrop,
+    Button,
+    CircularProgress,
+    Grid,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Typography
+} from "@mui/material";
+import {ArrowBack, AttachMoney, Collections, Description} from "@mui/icons-material";
 
 const Picture = () => {
     const {address, tokenId} = useParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const picture = useSelector(state => state.picture);
     const loading = useSelector(state => state.singleLoading);
@@ -16,25 +29,58 @@ const Picture = () => {
 
     return (
         <>
-            {loading ? <Box sx={{width: '100%'}}><LinearProgress/></Box> : null}
+            {loading &&
+                <Backdrop open={loading}>
+                    <CircularProgress color='inherit'/>
+                </Backdrop>
+            }
             {picture &&
-                <Card>
-                    <Grid container component={CardContent}>
-                        <Grid item>
-                            <CardMedia
-                                component='img'
-                                alt={picture.name}
-                                image={picture.image_url}
-                                sx={{width: '300px', height: '350px'}}
-                            />
+                <>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={4}>
+                            {picture.image_url &&
+                                <img src={picture.image_url} alt={picture.name} width='350'/>}
                         </Grid>
-                        <Grid item paddingX='16px'>
-                            <Typography variant='h4'>
+                        <Grid item xs={12} md={8}>
+                            <Typography component="h2" variant="h3">
                                 {picture.name}
                             </Typography>
+                            <List>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <Description/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary="Description"
+                                                  secondary={picture.description ? picture.description : picture.collection.description}/>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <Collections/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary="Collection" secondary={picture.collection.name}/>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <AttachMoney/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary="USD price"
+                                                  secondary={picture.collection.payment_tokens[0].usd_price}/>
+                                </ListItem>
+                            </List>
                         </Grid>
                     </Grid>
-                </Card>
+
+                    <Grid container justifyContent="center" sx={{my: 6}}>
+                        <Button onClick={() => navigate(-1)} variant="contained" size="large"
+                                startIcon={<ArrowBack/>}>Go back</Button>
+                    </Grid>
+                </>
             }
         </>
     );

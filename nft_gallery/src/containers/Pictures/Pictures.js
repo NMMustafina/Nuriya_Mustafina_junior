@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Button, Grid, LinearProgress} from "@mui/material";
+import {Backdrop, Button, CircularProgress, Grid} from "@mui/material";
 import {fetchPictures} from "../../store/actions/picturesActions";
 import PictureItem from "../../components/PictureItem/PictureItem";
+import {ArrowBack, ArrowForward} from "@mui/icons-material";
 
 const Pictures = () => {
     const dispatch = useDispatch();
@@ -28,7 +29,11 @@ const Pictures = () => {
 
     return (
         <>
-            {loading ? <Box sx={{width: '100%'}}><LinearProgress/></Box> : null}
+            {loading &&
+                <Backdrop open={loading}>
+                    <CircularProgress color='inherit'/>
+                </Backdrop>
+            }
             {pictures &&
                 <>
                     <Grid container rowSpacing={6} columnSpacing={{xs: 1, sm: 2, md: 3}}>
@@ -42,9 +47,15 @@ const Pictures = () => {
                                 tokenId={picture.token_id}
                             />
                         ))}
+                        <Grid item xs={6}>
+                            <Button disabled={!previous} onClick={onPreviousBtnClick} variant="contained" size="large"
+                                    startIcon={<ArrowBack/>}>Previous</Button>
+                        </Grid>
+                        <Grid item xs={6} sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                            <Button disabled={!next} onClick={onNextBtnClick} variant="contained" size="large"
+                                    endIcon={<ArrowForward/>}>Next</Button>
+                        </Grid>
                     </Grid>
-                    <Button disabled={!previous} onClick={onPreviousBtnClick}>Previous</Button>
-                    <Button disabled={!next} onClick={onNextBtnClick}>Next</Button>
                 </>
             }
         </>

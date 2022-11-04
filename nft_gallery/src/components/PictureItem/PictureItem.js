@@ -1,28 +1,27 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {Card, CardActionArea, CardContent, CardMedia, Grid, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
 
-const PictureItem = ({id, name, image}) => {
+const PictureItem = ({name, image, address, tokenId}) => {
     return (
-        <>
-            <Grid item md={3}>
-                <Card sx={{height: '100%', maxWidth: 345}} elevation={2}>
-                    <CardActionArea component={Link} to={'/nft/' + id} sx={{height: '100%'}}>
-                        <CardMedia
-                            component="img"
-                            height="250"
-                            image={image}
-                            alt={name}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="body1">
-                                <i>Name:</i> <b>{name}</b>
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            </Grid>
-        </>
+        <Grid item xs={12} sm={12} md={6} lg={3}>
+            <Card sx={{height: '100%'}}>
+                <CardMedia
+                    alt={name}
+                    component="img"
+                    image={image}
+                    height="250"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="body1">
+                        <i>Name:</i> <strong>{name}</strong>
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button component={Link} to={`/nft/${address}/${tokenId}`}>More info</Button>
+                </CardActions>
+            </Card>
+        </Grid>
     );
 };
 

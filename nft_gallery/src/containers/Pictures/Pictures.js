@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Grid, LinearProgress} from "@mui/material";
+import {Box, Button, Grid, LinearProgress} from "@mui/material";
 import {fetchPictures} from "../../store/actions/picturesActions";
 import PictureItem from "../../components/PictureItem/PictureItem";
 
@@ -8,10 +8,23 @@ const Pictures = () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.fetchLoading);
     const pictures = useSelector(state => state.pictures.assets);
+    const previous = useSelector(state => state.pictures.previous);
+    const next = useSelector(state => state.pictures.next);
+
+    const [query, setQuery] = useState('format=json');
 
     useEffect(() => {
-        dispatch(fetchPictures());
-    }, [dispatch]);
+        dispatch(fetchPictures(query));
+        window.scrollTo(0, 0)
+    }, [dispatch, query]);
+
+    const onPreviousBtnClick = () => {
+        setQuery('cursor=' + previous);
+    };
+
+    const onNextBtnClick = () => {
+        setQuery('cursor=' + next);
+    };
 
     return (
         <>
@@ -25,9 +38,13 @@ const Pictures = () => {
                                 id={picture.id}
                                 name={picture.name}
                                 image={picture.image_thumbnail_url}
+                                address={picture.asset_contract.address}
+                                tokenId={picture.token_id}
                             />
                         ))}
                     </Grid>
+                    <Button disabled={!previous} onClick={onPreviousBtnClick}>Previous</Button>
+                    <Button disabled={!next} onClick={onNextBtnClick}>Next</Button>
                 </>
             }
         </>
